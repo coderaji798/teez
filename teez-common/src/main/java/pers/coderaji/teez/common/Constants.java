@@ -1,0 +1,1 @@
+package pers.coderaji.teez.common;/** * @author aji * @description 常量 * @date 2024/7/24 19:39 */public final class Constants {    public static final String EQUAL = "=";    public static final String SET = "set";    public static final int PARAM_LENGTH = 1;}
