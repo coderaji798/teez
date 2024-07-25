@@ -5,7 +5,7 @@ package pers.coderaji.teez.common.extension;
  * @description 扩建工厂
  * @date 2024/7/24 15:04
  */
-@SPI("test")
+@SPI("spi")
 public interface ExtensionFactory {
     /**
      * 获取扩展类

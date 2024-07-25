@@ -1,0 +1,2 @@
+spi=pers.coderaji.teez.common.extension.support.SpiExtensionFactory
+adaptive=pers.coderaji.teez.common.extension.support.AdaptiveExtensionFactory
