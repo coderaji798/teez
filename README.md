@@ -1,6 +1,7 @@
 # Teez
 
-![Tees](static/teez.png)
+![teez](https://github.com/user-attachments/assets/71165e07-25e2-4304-9235-1ae151c77cf7)
+
 
 Teez是一款基于Java语言的RPC框架，其设计灵感来源于Dubbo。  
 
