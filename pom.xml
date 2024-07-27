@@ -11,6 +11,7 @@
     <modules>
         <module>teez-common</module>
         <module>teez-config</module>
+        <module>teez-test</module>
     </modules>
 
 

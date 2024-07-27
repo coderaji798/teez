@@ -2,6 +2,7 @@ package pers.coderaji.teez.config;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -40,7 +41,25 @@ public class ApplicationConfig extends AbstractConfig {
      */
     private static final Map<String, ReferenceConfig<?>> REFERENCES = new ConcurrentHashMap<>();
 
+    protected static void addService(String name, ServiceConfig<?> serviceConfig) {
+        if (Objects.isNull(serviceConfig)) {
+            throw new IllegalArgumentException("serviceConfig is null");
+        }
+        if (Objects.isNull(name) || name.isEmpty()) {
+            name = Objects.isNull(serviceConfig.getName()) || serviceConfig.getName().isEmpty() ? serviceConfig.getType().getName() : serviceConfig.getName();
+        }
+        SERVICES.put(name, serviceConfig);
+    }
 
+    protected static void addReference(String name, ReferenceConfig<?> referenceConfig) {
+        if (Objects.isNull(referenceConfig)) {
+            throw new IllegalArgumentException("referenceConfig is null");
+        }
+        if (Objects.isNull(name) || name.isEmpty()) {
+            name = Objects.isNull(referenceConfig.getName()) || referenceConfig.getName().isEmpty() ? referenceConfig.getType().getName() : referenceConfig.getName();
+        }
+        REFERENCES.put(name, referenceConfig);
+    }
 
     @Override
     protected void doDestroy() {
