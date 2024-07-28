@@ -2,9 +2,11 @@ package pers.coderaji.teez.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.logger.Logger;
 import pers.coderaji.teez.config.annotation.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +36,10 @@ public class ServiceConfig<T> extends AbstractConfig {
     private ApplicationConfig provider;
 
     private final String serviceName;
+    /**
+     * 不同注注册中心存不同url
+     */
+    private final List<URL> urls = new ArrayList<>();
 
     public ServiceConfig(Service service) {
         appendAnnotation(Service.class, service);

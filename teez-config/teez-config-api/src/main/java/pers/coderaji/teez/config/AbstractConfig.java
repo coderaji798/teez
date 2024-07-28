@@ -4,11 +4,9 @@ import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.logger.Logger;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -34,7 +32,9 @@ public abstract class AbstractConfig implements Serializable {
         configs.add(config);
     }
 
-    protected abstract void doDestroy();
+    protected void doDestroy(){
+        //doDestroy
+    }
 
     protected <T> void appendAnnotation(Class<T> type, T annotation) {
         if (Objects.nonNull(type) && Objects.nonNull(annotation)) {

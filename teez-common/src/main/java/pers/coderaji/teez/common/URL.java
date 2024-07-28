@@ -1,5 +1,8 @@
 package pers.coderaji.teez.common;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +14,8 @@ import java.util.Objects;
  * @description 统一资源定位地址
  * @date 2024/7/25 11:49
  */
+@Getter
+@EqualsAndHashCode
 public final class URL implements Serializable {
     private final String protocol;
 

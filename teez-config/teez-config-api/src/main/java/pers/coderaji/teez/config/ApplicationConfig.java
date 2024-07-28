@@ -1,5 +1,8 @@
 package pers.coderaji.teez.config;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -10,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2024/7/27 23:20
  * @description 应用程序配置
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class ApplicationConfig extends AbstractConfig {
 
     /**

@@ -2,8 +2,10 @@ package pers.coderaji.teez.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.config.annotation.Reference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +32,11 @@ public class ReferenceConfig<T> extends AbstractConfig {
     private ApplicationConfig consumer;
 
     private final String referenceName;
+
+    /**
+     * 提供者列表
+     */
+    private final List<URL> urls = new ArrayList<>();
 
     public ReferenceConfig(Reference reference) {
         appendAnnotation(Reference.class, reference);
