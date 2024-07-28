@@ -35,6 +35,7 @@ public final class URL implements Serializable {
         this.path = path;
         this.parameters = parameters;
     }
+
     public static URL valueOf(String url) {
         if (Objects.isNull(url) || (url = url.trim()).isEmpty()) {
             throw new IllegalArgumentException("url is empty");
@@ -111,6 +112,27 @@ public final class URL implements Serializable {
         return new URL(protocol, username, password, host, port, path, parameters);
     }
 
+    public static URL valueOf(Map<String, String> map) {
+        if (Objects.isNull(map) || map.isEmpty()) {
+            throw new IllegalArgumentException("map is empty");
+        }
+        String protocol = map.remove("protocol");
+        if (Objects.isNull(protocol) || protocol.trim().isEmpty()) {
+            throw new IllegalArgumentException("protocol is empty");
+        }
+        String username = map.remove("protocol");
+        String password = map.remove("password");
+        String host = map.remove("host");
+        int port = -1;
+        String string = map.remove("port");
+        if (Objects.nonNull(string) && !string.trim().isEmpty()) {
+            port = Integer.parseInt(string);
+        }
+        String path = map.remove("path");
+        Map<String, String> parameters = new HashMap<>(map);
+        return new URL(protocol, username, password, host, port, path, parameters);
+    }
+
     public String urlString() {
         StringBuilder builder = new StringBuilder();
         if (Objects.nonNull(protocol) && !protocol.isEmpty()) {
@@ -129,12 +151,7 @@ public final class URL implements Serializable {
                 builder.append(":").append(host);
             }
         }
-        if (Objects.nonNull(host) && !host.isEmpty()) {
-            builder.append(host);
-            if (port > 0) {
-                builder.append(":").append(host);
-            }
-        }        if (Objects.nonNull(path) && !path.isEmpty()) {
+        if (Objects.nonNull(path) && !path.isEmpty()) {
             builder.append("/").append(path);
         }
         if (Objects.nonNull(parameters) && !parameters.isEmpty()) {
