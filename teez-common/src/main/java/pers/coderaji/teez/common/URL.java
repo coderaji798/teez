@@ -172,4 +172,43 @@ public final class URL implements Serializable {
         }
         return builder.toString();
     }
+
+    public String getParameter(String key) {
+        return parameters.get(key);
+    }
+    public <T> T getParameter(String key, T defaultValue) {
+        String value = parameters.get(key);
+        if (Objects.isNull(value) || Objects.equals(Constants.NULL, value) || Objects.isNull(defaultValue)) {
+            return defaultValue;
+        }
+        return convert(defaultValue, value);
+    }
+
+    private <T> T convert(T defaultValue, String value) {
+        if (defaultValue instanceof Boolean) {
+            return (T) Boolean.valueOf(value);
+        } else if (defaultValue instanceof Byte) {
+            return (T) Byte.valueOf(value);
+        } else if (defaultValue instanceof Short) {
+            return (T) Short.valueOf(value);
+        } else if (defaultValue instanceof Integer) {
+            return (T) Integer.valueOf(value);
+        } else if (defaultValue instanceof Long) {
+            return (T) Long.valueOf(value);
+        } else if (defaultValue instanceof Float) {
+            return (T) Float.valueOf(value);
+        } else if (defaultValue instanceof Double) {
+            return (T) Double.valueOf(value);
+        } else if (defaultValue instanceof Character) {
+            return (T) Character.valueOf(value.charAt(0));
+        } else if (defaultValue instanceof String) {
+            return (T) value;
+        } else {
+            throw new IllegalArgumentException(String.format("%s is not definition", defaultValue.getClass()));
+        }
+    }
+
+    public String getAddress() {
+        return port <= 0 ? host : host + ":" + port;
+    }
 }
