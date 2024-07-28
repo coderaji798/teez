@@ -41,20 +41,22 @@ public class ApplicationConfig extends AbstractConfig {
      */
     private static final Map<String, ReferenceConfig<?>> REFERENCES = new ConcurrentHashMap<>();
 
-    protected static void addService(String name, ServiceConfig<?> serviceConfig) {
+    protected static void addService(ServiceConfig<?> serviceConfig) {
         if (Objects.isNull(serviceConfig)) {
             throw new IllegalArgumentException("serviceConfig is null");
         }
+        String name = serviceConfig.getServiceName();
         if (Objects.isNull(name) || name.isEmpty()) {
             name = Objects.isNull(serviceConfig.getName()) || serviceConfig.getName().isEmpty() ? serviceConfig.getType().getName() : serviceConfig.getName();
         }
         SERVICES.put(name, serviceConfig);
     }
 
-    protected static void addReference(String name, ReferenceConfig<?> referenceConfig) {
+    protected static void addReference(ReferenceConfig<?> referenceConfig) {
         if (Objects.isNull(referenceConfig)) {
             throw new IllegalArgumentException("referenceConfig is null");
         }
+        String name = referenceConfig.getReferenceName();
         if (Objects.isNull(name) || name.isEmpty()) {
             name = Objects.isNull(referenceConfig.getName()) || referenceConfig.getName().isEmpty() ? referenceConfig.getType().getName() : referenceConfig.getName();
         }

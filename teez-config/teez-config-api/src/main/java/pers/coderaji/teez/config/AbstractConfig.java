@@ -67,4 +67,16 @@ public abstract class AbstractConfig implements Serializable {
             }
         }
     }
+
+    protected String getUniqueName(String group, String name, String version) {
+        StringBuilder buf = new StringBuilder();
+        if (Objects.nonNull(group) && !group.isEmpty()) {
+            buf.append(group).append("/");
+        }
+        buf.append(name);
+        if (Objects.nonNull(version) && !version.isEmpty()) {
+            buf.append(":").append(version);
+        }
+        return buf.toString();
+    }
 }

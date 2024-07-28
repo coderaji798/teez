@@ -33,9 +33,13 @@ public class ServiceConfig<T> extends AbstractConfig {
 
     private ApplicationConfig provider;
 
+    private final String serviceName;
+
     public ServiceConfig(Service service) {
         appendAnnotation(Service.class, service);
         needDestroy(this);
+        this.serviceName = getUniqueName(group, name, version);
+        ApplicationConfig.addService(this);
     }
 
     @Override

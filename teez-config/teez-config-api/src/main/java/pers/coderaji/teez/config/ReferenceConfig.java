@@ -29,9 +29,13 @@ public class ReferenceConfig<T> extends AbstractConfig {
 
     private ApplicationConfig consumer;
 
+    private final String referenceName;
+
     public ReferenceConfig(Reference reference) {
         appendAnnotation(Reference.class, reference);
         needDestroy(this);
+        this.referenceName = getUniqueName(group, name, version);
+        ApplicationConfig.addReference(this);
     }
 
     @Override
