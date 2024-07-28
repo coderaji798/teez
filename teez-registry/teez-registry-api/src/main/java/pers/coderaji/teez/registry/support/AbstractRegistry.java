@@ -148,8 +148,8 @@ public abstract class AbstractRegistry implements Registry {
     }
 
     public static boolean isMatch(URL consumerUrl, URL providerUrl) {
-        String consumerInterface = consumerUrl.getParameter(Constants.TYPE);
-        String providerInterface = providerUrl.getParameter(Constants.TYPE);
+        String consumerInterface = consumerUrl.getParameter(Constants.NAME);
+        String providerInterface = providerUrl.getParameter(Constants.NAME);
         if (!Objects.equals(consumerInterface, providerInterface)) {
             return false;
         }

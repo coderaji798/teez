@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public abstract class AbstractConfig implements Serializable {
         configs.add(config);
     }
 
-    protected void doDestroy(){
+    protected void doDestroy() {
         //doDestroy
     }
 
@@ -78,5 +79,61 @@ public abstract class AbstractConfig implements Serializable {
             buf.append(":").append(version);
         }
         return buf.toString();
+    }
+
+    protected static void appendParameters(Map<String, String> parameters, Object config, String prefix) {
+        if (Objects.isNull(config)) {
+            return;
+        }
+        Method[] methods = config.getClass().getMethods();
+        for (Method method : methods) {
+            try {
+                String name = method.getName();
+                if (name.startsWith(Constants.GET)
+                        && !Objects.equals("getClass", name)
+                        && Modifier.isPublic(method.getModifiers())
+                        && method.getParameterTypes().length == 0
+                        && isPrimitive(method.getReturnType())) {
+                    logger.info("method:{}", method);
+                    int index = Constants.GET.length();
+                    String key = name.substring(index, index + 1).toLowerCase() + name.substring(index + 1);
+                    Object value = method.invoke(config, new Object[0]);
+                    String str = String.valueOf(value).trim();
+                    if (Objects.nonNull(value) && !str.isEmpty()) {
+                        if (Objects.nonNull(prefix) && !prefix.isEmpty()) {
+                            key = prefix + Constants.DOT + key;
+                        }
+                        parameters.put(key, str);
+                    }
+                } else if ("getParameters".equals(name)
+                        && Modifier.isPublic(method.getModifiers())
+                        && method.getParameterTypes().length == 0
+                        && method.getReturnType() == Map.class) {
+                    Map<String, String> map = (Map<String, String>) method.invoke(config, new Object[0]);
+                    if (Objects.nonNull(map) && !map.isEmpty()) {
+                        String pre = (Objects.nonNull(prefix) && !prefix.isEmpty()) ? prefix + Constants.DOT : "";
+                        for (Map.Entry<String, String> entry : map.entrySet()) {
+                            parameters.put(pre + entry.getKey().replace('-', '.'), entry.getValue());
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+    }
+
+    private static boolean isPrimitive(Class<?> type) {
+        return type.isPrimitive()
+                || type == String.class
+                || type == Character.class
+                || type == Boolean.class
+                || type == Byte.class
+                || type == Short.class
+                || type == Integer.class
+                || type == Long.class
+                || type == Float.class
+                || type == Double.class
+                || type == Object.class;
     }
 }

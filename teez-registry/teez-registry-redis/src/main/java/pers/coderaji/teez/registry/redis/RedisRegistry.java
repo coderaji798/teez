@@ -108,7 +108,7 @@ public class RedisRegistry extends AbstractRegistry {
     }
 
     private String toServicePath(URL url) {
-        return root + url.getParameter(Constants.TYPE);
+        return root + url.getParameter(Constants.NAME);
     }
 
     private String toCategoryPath(URL url) {
