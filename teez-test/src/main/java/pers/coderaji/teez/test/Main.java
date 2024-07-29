@@ -44,7 +44,7 @@ public class Main {
         redisRegistry.register(url);
 
         try {
-            Thread.sleep(60 * 1000);
+            //Thread.sleep(60 * 1000);
         } catch (Exception ignore) {
 
         }
