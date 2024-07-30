@@ -11,6 +11,7 @@ import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.config.annotation.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,7 +33,7 @@ public class ServiceConfig<T> extends AbstractConfig {
 
     private String name;
 
-    private Class<T> type;
+    private Class<?> type;
 
     private T reference;
 
@@ -83,6 +84,23 @@ public class ServiceConfig<T> extends AbstractConfig {
     }
 
     protected synchronized void doExport() {
-        Assert.nonEmpty(name, "");
+        //校验配置
+        Assert.nonEmpty(name, "name is null");
+        Assert.nonNull(provider, "provider is null");
+        Assert.nonEmpty(provider.getRegistryConfigs(), "registry configs are null");
+        Assert.nonNull(provider.getProtocolConfig(), "protocol config is null");
+        try {
+            type = Class.forName(name, true, Thread.currentThread().getContextClassLoader());
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+        ProtocolConfig protocolConfig = provider.getProtocolConfig();
+        String protocolName = protocolConfig.getName();
+        if (ObjectUtil.isEmpty(protocolName)) {
+            protocolName = Constants.TEEZ;
+        }
+        Map<String,String> map = new HashMap<>();
+        map.put(Constants.SIDE,Constants.PROVIDER);
+        map.put(Constants.TIMESTAMP, String.valueOf(System.currentTimeMillis()));
     }
 }
