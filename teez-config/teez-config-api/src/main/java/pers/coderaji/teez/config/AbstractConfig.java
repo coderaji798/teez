@@ -2,6 +2,7 @@ package pers.coderaji.teez.config;
 
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.logger.Logger;
+import pers.coderaji.teez.common.utl.ObjectUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -71,11 +72,11 @@ public abstract class AbstractConfig implements Serializable {
 
     protected String getUniqueName(String group, String name, String version) {
         StringBuilder buf = new StringBuilder();
-        if (Objects.nonNull(group) && !group.isEmpty()) {
+        if (ObjectUtil.nonEmpty(group)) {
             buf.append(group).append("/");
         }
         buf.append(name);
-        if (Objects.nonNull(version) && !version.isEmpty()) {
+        if (ObjectUtil.nonEmpty(version)) {
             buf.append(":").append(version);
         }
         return buf.toString();
@@ -99,8 +100,8 @@ public abstract class AbstractConfig implements Serializable {
                     String key = name.substring(index, index + 1).toLowerCase() + name.substring(index + 1);
                     Object value = method.invoke(config, new Object[0]);
                     String str = String.valueOf(value).trim();
-                    if (Objects.nonNull(value) && !str.isEmpty()) {
-                        if (Objects.nonNull(prefix) && !prefix.isEmpty()) {
+                    if (Objects.nonNull(value) && ObjectUtil.nonEmpty(str)) {
+                        if (ObjectUtil.nonEmpty(prefix)) {
                             key = prefix + Constants.DOT + key;
                         }
                         parameters.put(key, str);
@@ -110,8 +111,8 @@ public abstract class AbstractConfig implements Serializable {
                         && method.getParameterTypes().length == 0
                         && method.getReturnType() == Map.class) {
                     Map<String, String> map = (Map<String, String>) method.invoke(config, new Object[0]);
-                    if (Objects.nonNull(map) && !map.isEmpty()) {
-                        String pre = (Objects.nonNull(prefix) && !prefix.isEmpty()) ? prefix + Constants.DOT : "";
+                    if (ObjectUtil.nonEmpty(map)) {
+                        String pre =ObjectUtil.nonEmpty(prefix) ? prefix + Constants.DOT : "";
                         for (Map.Entry<String, String> entry : map.entrySet()) {
                             parameters.put(pre + entry.getKey().replace('-', '.'), entry.getValue());
                         }

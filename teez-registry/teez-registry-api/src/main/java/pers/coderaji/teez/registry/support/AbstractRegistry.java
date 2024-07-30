@@ -4,6 +4,8 @@ import lombok.Data;
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.logger.Logger;
+import pers.coderaji.teez.common.utl.Assert;
+import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.registry.NotifyListener;
 import pers.coderaji.teez.registry.Registry;
 
@@ -45,14 +47,14 @@ public abstract class AbstractRegistry implements Registry {
     @Override
     public void destroy() {
         Set<URL> set = new HashSet<>(registered);
-        if (!set.isEmpty()) {
+        if (ObjectUtil.nonEmpty(set)) {
             for (URL url : set) {
                 unregister(url);
                 logger.info("destroy registered url: {}", url);
             }
         }
         Map<URL, Set<NotifyListener>> map = new HashMap<>(subscribed);
-        if (!map.isEmpty()) {
+        if (ObjectUtil.nonEmpty(map)) {
             map.forEach((url, v) -> {
                 v.forEach(item -> {
                     unsubscribe(url, item);
@@ -64,28 +66,20 @@ public abstract class AbstractRegistry implements Registry {
 
     @Override
     public void register(URL url) {
-        if (Objects.isNull(url)) {
-            throw new IllegalArgumentException("register url is null");
-        }
+        Assert.nonNull(url,"register url is null");
         registered.add(url);
     }
 
     @Override
     public void unregister(URL url) {
-        if (Objects.isNull(url)) {
-            throw new IllegalArgumentException("unregister url is null");
-        }
+        Assert.nonNull(url,"unregister url is null");
         registered.remove(url);
     }
 
     @Override
     public void subscribe(URL url, NotifyListener listener) {
-        if (Objects.isNull(url)) {
-            throw new IllegalArgumentException("subscribe url is null");
-        }
-        if (Objects.isNull(listener)) {
-            throw new IllegalArgumentException("subscribe listener is null");
-        }
+        Assert.nonNull(url,"subscribe url is null");
+        Assert.nonNull(listener,"subscribe listener is null");
         Set<NotifyListener> listeners = subscribed.get(url);
         if (listeners == null) {
             subscribed.putIfAbsent(url, Collections.synchronizedSet(new HashSet<>()));
@@ -96,12 +90,8 @@ public abstract class AbstractRegistry implements Registry {
 
     @Override
     public void unsubscribe(URL url, NotifyListener listener) {
-        if (Objects.isNull(url)) {
-            throw new IllegalArgumentException("unsubscribe url is null");
-        }
-        if (Objects.isNull(listener)) {
-            throw new IllegalArgumentException("unsubscribe listener is null");
-        }
+        Assert.nonNull(url,"unsubscribe url is null");
+        Assert.nonNull(listener,"unsubscribe listener is null");
         Set<NotifyListener> listeners = subscribed.get(url);
         if (listeners != null) {
             listeners.remove(listener);
@@ -109,13 +99,9 @@ public abstract class AbstractRegistry implements Registry {
     }
 
     protected void notify(URL url, NotifyListener listener, List<URL> urls) {
-        if (Objects.isNull(url)) {
-            throw new IllegalArgumentException("notify url is null");
-        }
-        if (Objects.isNull(listener)) {
-            throw new IllegalArgumentException("notify listener is null");
-        }
-        if (Objects.isNull(urls) || urls.isEmpty()) {
+        Assert.nonNull(url,"notify url is null");
+        Assert.nonNull(listener,"notify listener is null");
+        if (ObjectUtil.isEmpty(urls)) {
             logger.info("notify urls is empty");
             return;
         }
@@ -128,7 +114,7 @@ public abstract class AbstractRegistry implements Registry {
                     categoryList.add(u);
                 }
             }
-            if (result.isEmpty()) {
+            if (ObjectUtil.isEmpty(result)) {
                 return;
             }
             Map<String, List<URL>> categoryNotified = notified.get(url);

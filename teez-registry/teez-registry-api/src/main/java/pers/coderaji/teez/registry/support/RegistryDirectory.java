@@ -2,6 +2,7 @@ package pers.coderaji.teez.registry.support;
 
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
+import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.registry.NotifyListener;
 
 import java.util.HashMap;
@@ -21,9 +22,8 @@ public class RegistryDirectory<T> implements NotifyListener {
     private final Map<String, String> paramters;
 
     public RegistryDirectory(URL url, Class<T> type) {
-        if (Objects.isNull(url) || Objects.isNull(type)) {
-            throw new IllegalArgumentException("argument is null");
-        }
+        Assert.nonNull(url,"url is null");
+        Assert.nonNull(type,"type is null");
         this.url = url;
         this.type = type;
         String string = url.getParameters().get(Constants.METHODS);

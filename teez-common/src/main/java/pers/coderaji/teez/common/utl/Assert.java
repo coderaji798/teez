@@ -28,8 +28,13 @@ public class Assert {
         }
     }
 
-    public static void nonEmpty(Object object, String msg) {
+    public static void nonNull(Object object, String msg) {
         if (Objects.isNull(object)) {
+            throw new AssertionError(msg);
+        }
+    }
+    public static void nonFalse(boolean bool, String msg) {
+        if (!bool) {
             throw new AssertionError(msg);
         }
     }

@@ -5,6 +5,7 @@ import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.NamedThreadFactory;
 import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.logger.Logger;
+import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.registry.NotifyListener;
 import pers.coderaji.teez.registry.support.AbstractRegistry;
 import redis.clients.jedis.Jedis;
@@ -65,7 +66,7 @@ public class RedisRegistry extends AbstractRegistry {
                 host = address;
                 port = DEFAULT_REDIS_PORT;
             }
-            if (Objects.isNull(password) || password.trim().isEmpty()) {
+            if (ObjectUtil.isEmpty(password)) {
                 this.jedisPools.put(address, new JedisPool(config, host, port,
                         url.getParameter(Constants.TIMEOUT, Constants.DEFAULT_TIMEOUT)));
             } else {
@@ -203,7 +204,7 @@ public class RedisRegistry extends AbstractRegistry {
     }
 
     private void doNotify(Jedis jedis, Collection<String> keys, URL url, Collection<NotifyListener> listeners) {
-        if (Objects.isNull(keys) || keys.isEmpty() || Objects.isNull(listeners) || listeners.isEmpty()) {
+        if (ObjectUtil.isEmpty(keys) || ObjectUtil.isEmpty(listeners)) {
             return;
         }
         long now = System.currentTimeMillis();
@@ -212,7 +213,7 @@ public class RedisRegistry extends AbstractRegistry {
             List<URL> urls = new ArrayList<>();
             //获取当前key对应的所有field
             Map<String, String> values = jedis.hgetAll(key);
-            if (Objects.nonNull(values) && !values.isEmpty()) {
+            if (ObjectUtil.nonEmpty(values)) {
                 for (Map.Entry<String, String> entry : values.entrySet()) {
                     //获取field对应的值
                     URL u = URL.valueOf(entry.getKey());
@@ -227,7 +228,7 @@ public class RedisRegistry extends AbstractRegistry {
             result.addAll(urls);
             logger.info("redis notify: {} = {}", key, urls);
         }
-        if (result.isEmpty()) {
+        if (ObjectUtil.isEmpty(result)) {
             return;
         }
         for (NotifyListener listener : listeners) {

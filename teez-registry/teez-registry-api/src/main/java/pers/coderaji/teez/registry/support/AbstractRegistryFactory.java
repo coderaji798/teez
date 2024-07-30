@@ -6,7 +6,6 @@ import pers.coderaji.teez.registry.Registry;
 import pers.coderaji.teez.registry.RegistryFactory;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

@@ -2,6 +2,8 @@ package pers.coderaji.teez.common;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import pers.coderaji.teez.common.utl.Assert;
+import pers.coderaji.teez.common.utl.ObjectUtil;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,9 +44,7 @@ public final class URL implements Serializable {
     }
 
     public static URL valueOf(String url) {
-        if (Objects.isNull(url) || (url = url.trim()).isEmpty()) {
-            throw new IllegalArgumentException("url is empty");
-        }
+        Assert.nonEmpty(url = url.trim(),"url is empty");
         // protocol://username:password@host:port/path?param1=val1&param2=val2
         Map<String, String> parameters = null;
         //1.参数与其余部分分割
@@ -56,7 +56,7 @@ public final class URL implements Serializable {
             for (String string : split) {
                 //元素不为空
                 string = string.trim();
-                if (!string.isEmpty()) {
+                if (ObjectUtil.nonEmpty(string)) {
                     //判断是不是键值对
                     int i = string.indexOf("=");
                     if (i >= 0) {
@@ -107,7 +107,7 @@ public final class URL implements Serializable {
         index = url.indexOf(":");
         if (index >= 0) {
             String s = url.substring(index + 1);
-            if (!s.isEmpty()) {
+            if (ObjectUtil.nonEmpty(s)) {
                 port = Integer.parseInt(s);
             }
             url = url.substring(0, index);
@@ -118,19 +118,15 @@ public final class URL implements Serializable {
     }
 
     public static URL valueOf(Map<String, String> map) {
-        if (Objects.isNull(map) || map.isEmpty()) {
-            throw new IllegalArgumentException("map is empty");
-        }
+        Assert.nonEmpty(map,"map is empty");
         String protocol = map.remove("protocol");
-        if (Objects.isNull(protocol) || protocol.trim().isEmpty()) {
-            throw new IllegalArgumentException("protocol is empty");
-        }
+        Assert.nonEmpty( protocol,"protocol is empty");
         String username = map.remove("protocol");
         String password = map.remove("password");
         String host = map.remove("host");
         int port = -1;
         String string = map.remove("port");
-        if (Objects.nonNull(string) && !string.trim().isEmpty()) {
+        if (ObjectUtil.nonEmpty(string)) {
             port = Integer.parseInt(string);
         }
         String path = map.remove("path");
@@ -140,26 +136,26 @@ public final class URL implements Serializable {
 
     public String urlString() {
         StringBuilder builder = new StringBuilder();
-        if (Objects.nonNull(protocol) && !protocol.isEmpty()) {
+        if (ObjectUtil.nonEmpty(protocol)) {
             builder.append(protocol).append("://");
         }
-        if (Objects.nonNull(username) && !username.isEmpty()) {
+        if (ObjectUtil.nonEmpty(username)) {
             builder.append(username).append(":");
-            if (Objects.nonNull(password) && !password.isEmpty()) {
+            if (ObjectUtil.nonEmpty(password)) {
                 builder.append(username);
             }
             builder.append("@");
         }
-        if (Objects.nonNull(host) && !host.isEmpty()) {
+        if (ObjectUtil.nonEmpty(host)) {
             builder.append(host);
             if (port > 0) {
                 builder.append(":").append(host);
             }
         }
-        if (Objects.nonNull(path) && !path.isEmpty()) {
+        if (ObjectUtil.nonEmpty(path)) {
             builder.append("/").append(path);
         }
-        if (Objects.nonNull(parameters) && !parameters.isEmpty()) {
+        if (ObjectUtil.nonEmpty(parameters)) {
             builder.append("?");
             Iterator<Map.Entry<String, String>> iterator = parameters.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -184,6 +180,7 @@ public final class URL implements Serializable {
         return convert(defaultValue, value);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T convert(T defaultValue, String value) {
         if (defaultValue instanceof Boolean) {
             return (T) Boolean.valueOf(value);
