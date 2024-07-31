@@ -123,6 +123,7 @@ public class ServiceConfig<T> extends AbstractConfig {
                     break;
                 }
             }
+            provider.getProtocolConfig().setPort(port);
         }
         //封装URL参数
         Map<String, String> parameters = new HashMap<>();
