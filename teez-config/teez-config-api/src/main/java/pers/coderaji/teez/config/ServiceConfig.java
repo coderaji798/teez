@@ -90,14 +90,17 @@ public class ServiceConfig<T> extends AbstractConfig {
         Assert.nonNull(provider, "provider is null");
         Assert.nonEmpty(provider.getRegistryConfigs(), "registry configs are null");
         Assert.nonNull(provider.getProtocolConfig(), "protocol config is null");
+        //跟据类全路径名获取类
         try {
             type = Class.forName(name, true, Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+        //设置默认协议
         if (ObjectUtil.isEmpty(provider.getProtocolConfig().getProtocol())) {
             provider.getProtocolConfig().setProtocol(Constants.TEEZ);
         }
+        //获取端口和地址（后续需要转移）
         Integer port = provider.getProtocolConfig().getPort();
         String host = provider.getProtocolConfig().getHost();
         if (ObjectUtil.isEmpty(host) || (Objects.isNull(port) || port < 0)) {
