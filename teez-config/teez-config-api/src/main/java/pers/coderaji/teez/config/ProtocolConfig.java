@@ -14,7 +14,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 public class ProtocolConfig extends AbstractConfig {
 
-    private String name;
+    private String protocol;
 
     private String host;
 

@@ -10,10 +10,11 @@ import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.config.annotation.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -94,13 +95,58 @@ public class ServiceConfig<T> extends AbstractConfig {
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
-        ProtocolConfig protocolConfig = provider.getProtocolConfig();
-        String protocolName = protocolConfig.getName();
-        if (ObjectUtil.isEmpty(protocolName)) {
-            protocolName = Constants.TEEZ;
+        if (ObjectUtil.isEmpty(provider.getProtocolConfig().getProtocol())) {
+            provider.getProtocolConfig().setProtocol(Constants.TEEZ);
         }
-        Map<String,String> map = new HashMap<>();
-        map.put(Constants.SIDE,Constants.PROVIDER);
-        map.put(Constants.TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+        Integer port = provider.getProtocolConfig().getPort();
+        String host = provider.getProtocolConfig().getHost();
+        if (ObjectUtil.isEmpty(host) || (Objects.isNull(port) || port < 0)) {
+            for (RegistryConfig registry : provider.getRegistryConfigs()) {
+                try {
+                    try (Socket socket = new Socket()) {
+                        SocketAddress address = new InetSocketAddress(registry.getHost(), registry.getPort());
+                        socket.connect(address, 1000);
+                        host = socket.getLocalAddress().getHostAddress();
+                        socket.close();
+                        break;
+                    }
+                } catch (Exception e) {
+                    logger.info(e.getMessage(), e);
+                }
+            }
+            provider.getProtocolConfig().setHost(host);
+            port = Constants.DEFAULT_PORT;
+            while (port > 0 && port < Constants.MAX_PORT) {
+                try (Socket socket = new Socket(host, port)) {
+                    port++;
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
+        //封装URL参数
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put(Constants.SIDE, Constants.PROVIDER);
+        parameters.put(Constants.TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+        //类名，版本号等信息
+        appendParameters(parameters, this, null);
+        //方法相关信息
+        if (ObjectUtil.nonEmpty(methods)) {
+            methods.forEach(method -> {
+                appendParameters(parameters, method, method.getName());
+                if (ObjectUtil.nonEmpty(method.getArguments())){
+                    method.getArguments().forEach(argument -> {
+                        String prefix = method.getName() + Constants.DOT + Constants.ARGUMENT;
+                        appendParameters(parameters, argument, prefix);
+                    });
+                }
+            });
+        }
+        //当前服务提供者信息
+        appendParameters(parameters, provider, Constants.PROVIDER);
+        provider.getRegistryConfigs().forEach(registry -> {
+
+        });
+
     }
 }

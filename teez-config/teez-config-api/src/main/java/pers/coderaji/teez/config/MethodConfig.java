@@ -20,5 +20,8 @@ public class MethodConfig extends AbstractConfig {
      */
     private String callback;
 
+    /**
+     * 没有入参，arguments为空
+     */
     private List<ArgumentConfig> arguments;
 }
