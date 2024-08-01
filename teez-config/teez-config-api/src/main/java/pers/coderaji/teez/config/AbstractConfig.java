@@ -95,7 +95,6 @@ public abstract class AbstractConfig implements Serializable {
                         && Modifier.isPublic(method.getModifiers())
                         && method.getParameterTypes().length == 0
                         && isPrimitive(method.getReturnType())) {
-                    logger.info("method:{}", method);
                     int index = Constants.GET.length();
                     String key = name.substring(index, index + 1).toLowerCase() + name.substring(index + 1);
                     Object value = method.invoke(config, new Object[0]);

@@ -138,7 +138,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         if (ObjectUtil.nonEmpty(methods)) {
             methods.forEach(method -> {
                 appendParameters(parameters, method, method.getName());
-                if (ObjectUtil.nonEmpty(method.getArguments())){
+                if (ObjectUtil.nonEmpty(method.getArguments())) {
                     method.getArguments().forEach(argument -> {
                         String prefix = method.getName() + Constants.DOT + Constants.ARGUMENT;
                         appendParameters(parameters, argument, prefix);
@@ -148,8 +148,13 @@ public class ServiceConfig<T> extends AbstractConfig {
         }
         //当前服务提供者信息
         appendParameters(parameters, provider, Constants.PROVIDER);
+        appendParameters(parameters, provider.getProtocolConfig(), null);
         provider.getRegistryConfigs().forEach(registry -> {
-
+            appendParameters(parameters, registry, Constants.REGISTRY);
+            logger.info("parameters:{}", parameters);
+            URL url = URL.valueOf(parameters);
+            logger.info("url:{}", url.urlString());
+            urls.add(url);
         });
 
     }
