@@ -10,7 +10,6 @@ import pers.coderaji.teez.common.logger.Logger;
 import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.config.annotation.Service;
-import pers.coderaji.teez.config.invoker.ProviderInvoker;
 import pers.coderaji.teez.config.invoker.ProviderMetaDataInvoker;
 import pers.coderaji.teez.rpc.Invoker;
 import pers.coderaji.teez.rpc.Protocol;
