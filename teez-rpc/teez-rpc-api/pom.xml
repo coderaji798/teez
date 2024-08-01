@@ -4,28 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>pers.coderaji.teez.config</groupId>
-        <artifactId>teez-config</artifactId>
+        <groupId>pers.coderaji.teez.rpc</groupId>
+        <artifactId>teez-rpc</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>teez-config-api</artifactId>
+    <artifactId>teez-rpc-api</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>pers.coderaji.teez.common</groupId>
             <artifactId>teez-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>pers.coderaji.teez.rpc</groupId>
-            <artifactId>teez-rpc-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

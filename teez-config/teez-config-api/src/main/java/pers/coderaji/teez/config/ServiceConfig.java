@@ -5,10 +5,16 @@ import lombok.EqualsAndHashCode;
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.NamedThreadFactory;
 import pers.coderaji.teez.common.URL;
+import pers.coderaji.teez.common.extension.ExtensionLoader;
 import pers.coderaji.teez.common.logger.Logger;
 import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.config.annotation.Service;
+import pers.coderaji.teez.config.invoker.ProviderInvoker;
+import pers.coderaji.teez.config.invoker.ProviderMetaDataInvoker;
+import pers.coderaji.teez.rpc.Invoker;
+import pers.coderaji.teez.rpc.Protocol;
+import pers.coderaji.teez.rpc.ProxyFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -58,6 +64,14 @@ public class ServiceConfig<T> extends AbstractConfig {
      */
     private static final ScheduledExecutorService delayExportExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("ServiceDelayExporter", true));
 
+    /**
+     * 代理工厂
+     */
+    private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+    /**
+     * 协议
+     */
+    private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
     public ServiceConfig(Service service) {
         appendAnnotation(Service.class, service);
@@ -84,6 +98,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected synchronized void doExport() {
         //校验配置
         Assert.nonEmpty(name, "name is null");
@@ -151,9 +166,13 @@ public class ServiceConfig<T> extends AbstractConfig {
         appendParameters(parameters, provider.getProtocolConfig(), null);
         provider.getRegistryConfigs().forEach(registry -> {
             appendParameters(parameters, registry, Constants.REGISTRY);
-            logger.info("parameters:{}", parameters);
+            //当前serviceConfig中的数据封装为URL
             URL url = URL.valueOf(parameters);
-            logger.info("url:{}", url.urlString());
+            //生成调用代理
+            Invoker invokerProxy = proxyFactory.getInvoker(reference, (Class<? super T>) type, url);
+            ProviderMetaDataInvoker metaDataInvoker = new ProviderMetaDataInvoker<>(invokerProxy, this);
+            //服务暴露
+            protocol.export(metaDataInvoker);
             urls.add(url);
         });
 
