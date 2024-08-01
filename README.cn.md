@@ -1,5 +1,7 @@
 # Teez
 
+[English](README.md) | 中文
+
 ![teez](https://github.com/user-attachments/assets/71165e07-25e2-4304-9235-1ae151c77cf7)
 
 
