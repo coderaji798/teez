@@ -1,7 +1,7 @@
 package pers.coderaji.teez.registry.support;
 
 import pers.coderaji.teez.common.URL;
-import pers.coderaji.teez.common.extension.ExtensionLoader;
+import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.registry.Registry;
 import pers.coderaji.teez.registry.RegistryFactory;
 
@@ -20,8 +20,16 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
 
     @Override
     public Registry getRegistry(URL url) {
-        Registry registry = createRegistry(url);
-        return null;
+        Assert.nonNull(url, "url is null");
+        String key = url.urlString();
+        Registry registry = REGISTRIES.get(key);
+        if (registry != null) {
+            return registry;
+        }
+        registry = createRegistry(url);
+        Assert.nonNull(registry, "registry is null");
+        REGISTRIES.put(key, registry);
+        return registry;
     }
 
     protected abstract Registry createRegistry(URL url);

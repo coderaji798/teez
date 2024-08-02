@@ -147,7 +147,7 @@ public class ServiceConfig<T> extends AbstractConfig {
         parameters.put(Constants.SIDE, Constants.PROVIDER);
         parameters.put(Constants.TIMESTAMP, String.valueOf(System.currentTimeMillis()));
         //类名，版本号等信息
-        appendParameters(parameters, this, null);
+        appendParameters(parameters, this, Constants.SERVICE);
         //方法相关信息
         if (ObjectUtil.nonEmpty(methods)) {
             methods.forEach(method -> {
@@ -162,11 +162,13 @@ public class ServiceConfig<T> extends AbstractConfig {
         }
         //当前服务提供者信息
         appendParameters(parameters, provider, Constants.PROVIDER);
-        appendParameters(parameters, provider.getProtocolConfig(), null);
+        appendParameters(parameters, provider.getProtocolConfig(), Constants.SERVICE);
         provider.getRegistryConfigs().forEach(registry -> {
             appendParameters(parameters, registry, Constants.REGISTRY);
+            parameters.put(Constants.PROTOCOL, Constants.REGISTRY);
             //当前serviceConfig中的数据封装为URL
             URL url = URL.valueOf(parameters);
+            logger.info("url:{}",url.urlString());
             //生成调用代理
             Invoker invokerProxy = proxyFactory.getInvoker(reference, (Class<? super T>) type, url);
             ProviderMetaDataInvoker metaDataInvoker = new ProviderMetaDataInvoker<>(invokerProxy, this);

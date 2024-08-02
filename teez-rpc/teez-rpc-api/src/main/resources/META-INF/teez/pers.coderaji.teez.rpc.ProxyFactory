@@ -1,1 +1,2 @@
 adaptive=pers.coderaji.teez.rpc.ProxyFactory$Adaptive
+jdk=pers.coderaji.teez.rpc.proxy.JdkProxyFactory

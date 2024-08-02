@@ -44,7 +44,7 @@ public final class URL implements Serializable {
     }
 
     public static URL valueOf(String url) {
-        Assert.nonEmpty(url = url.trim(),"url is empty");
+        Assert.nonEmpty(url = url.trim(), "url is empty");
         // protocol://username:password@host:port/path?param1=val1&param2=val2
         Map<String, String> parameters = null;
         //1.参数与其余部分分割
@@ -118,10 +118,10 @@ public final class URL implements Serializable {
     }
 
     public static URL valueOf(Map<String, String> map) {
-        Assert.nonEmpty(map,"map is empty");
+        Assert.nonEmpty(map, "map is empty");
         String protocol = map.remove("protocol");
-        Assert.nonEmpty( protocol,"protocol is empty");
-        String username = map.remove("protocol");
+        Assert.nonEmpty(protocol, "protocol is empty");
+        String username = map.remove("username");
         String password = map.remove("password");
         String host = map.remove("host");
         int port = -1;
@@ -142,14 +142,14 @@ public final class URL implements Serializable {
         if (ObjectUtil.nonEmpty(username)) {
             builder.append(username).append(":");
             if (ObjectUtil.nonEmpty(password)) {
-                builder.append(username);
+                builder.append(password);
             }
             builder.append("@");
         }
         if (ObjectUtil.nonEmpty(host)) {
             builder.append(host);
             if (port > 0) {
-                builder.append(":").append(host);
+                builder.append(":").append(port);
             }
         }
         if (ObjectUtil.nonEmpty(path)) {
@@ -172,6 +172,7 @@ public final class URL implements Serializable {
     public String getParameter(String key) {
         return parameters.get(key);
     }
+
     public <T> T getParameter(String key, T defaultValue) {
         String value = parameters.get(key);
         if (Objects.isNull(value) || Objects.equals(Constants.NULL, value) || Objects.isNull(defaultValue)) {
@@ -207,5 +208,33 @@ public final class URL implements Serializable {
 
     public String getAddress() {
         return port <= 0 ? host : host + ":" + port;
+    }
+
+    public Map<String, String> getParameters(String prefix) {
+        return getParameters(prefix, false);
+    }
+
+    public Map<String, String> getParametersAndRemove(String prefix) {
+        return getParameters(prefix, true);
+    }
+
+    private Map<String, String> getParameters(String prefix, boolean remove) {
+        Assert.nonEmpty(prefix, "prefix is empty");
+        prefix = prefix + Constants.DOT;
+        Map<String, String> map = new HashMap<>();
+        if (ObjectUtil.nonEmpty(parameters)) {
+            Iterator<Map.Entry<String, String>> iterator = parameters.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, String> next = iterator.next();
+                if (Objects.nonNull(next) && ObjectUtil.nonEmpty(next.getKey()) && next.getKey().startsWith(prefix)) {
+                    if (remove) {
+                        iterator.remove();
+                    }
+                    String key = next.getKey().replace(prefix, "");
+                    map.put(key, next.getValue());
+                }
+            }
+        }
+        return map;
     }
 }

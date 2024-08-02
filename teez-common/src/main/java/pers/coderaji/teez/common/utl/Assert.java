@@ -33,6 +33,11 @@ public class Assert {
             throw new AssertionError(msg);
         }
     }
+    public static void isNull(Object object, String msg) {
+        if (Objects.nonNull(object)) {
+            throw new AssertionError(msg);
+        }
+    }
     public static void nonFalse(boolean bool, String msg) {
         if (!bool) {
             throw new AssertionError(msg);

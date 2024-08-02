@@ -7,9 +7,7 @@ import pers.coderaji.teez.test.api.TestApi;
 import pers.coderaji.teez.test.api.impl.TestApiIml;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +26,12 @@ public class ServiceConfigTest {
         registryConfig.setHost("127.0.0.1");
         registryConfig.setPort(6379);
         registryConfig.setProtocol("redis");
+        Map<String, String> redisParam = new HashMap<>();
+        redisParam.put("max.idle", String.valueOf(20));
+        redisParam.put("min.idle", String.valueOf(10));
+        redisParam.put("max.active", String.valueOf(20));
+        redisParam.put("max.total", String.valueOf(30));
+        registryConfig.setParameters(redisParam);
         applicationConfig.setRegistryConfigs(Collections.singletonList(registryConfig));
         ProtocolConfig protocolConfig = new ProtocolConfig();
         protocolConfig.setProtocol("teez");
@@ -52,8 +56,15 @@ public class ServiceConfigTest {
         ServiceConfig<TestApi> serviceConfig = new ServiceConfig<>(annotation);
         serviceConfig.setProvider(applicationConfig);
         serviceConfig.setMethods(methodConfigs);
+        serviceConfig.setReference(testApi);
 
         logger.info("serviceConfig:{}", serviceConfig);
         serviceConfig.export();
+
+        try {
+            Thread.sleep(60 * 1000);
+        } catch (Exception ignore) {
+
+        }
     }
 }

@@ -87,11 +87,13 @@ public class RedisRegistry extends AbstractRegistry {
         this.expirePeriod = url.getParameter(Constants.SESSION, Constants.DEFAULT_SESSION_TIMEOUT);
         this.expireFuture = expireExecutor.scheduleWithFixedDelay(() -> {
             try {
+                logger.info("expireExecutor.scheduleWithFixedDelay");
                 for (Map.Entry<String, JedisPool> entry : jedisPools.entrySet()) {
                     JedisPool jedisPool = entry.getValue();
                     Jedis jedis = jedisPool.getResource();
                     try {
                         for (URL registered : new HashSet<>(getRegistered())) {
+                            logger.info("url:{}",registered);
                             String key = toCategoryPath(registered);
                             if (jedis.hset(key, registered.urlString(), String.valueOf(System.currentTimeMillis() + expirePeriod)) == 1) {
                                 jedis.publish(key, Constants.REGISTER);
