@@ -9,7 +9,7 @@ import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.registry.Registry;
 import pers.coderaji.teez.registry.RegistryFactory;
 import pers.coderaji.teez.rpc.*;
-import pers.coderaji.teez.rpc.support.AbstractExporter;
+import pers.coderaji.teez.rpc.support.InvokerWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,12 +47,9 @@ public class RegistryProtocol implements Protocol {
         registryServiceMap.putAll(url.getParameters());
         URL registryServiceUrl = URL.valueOf(registryServiceMap);
         registry.register(registryServiceUrl);
-        return new AbstractExporter<T>(invoker) {
-            @Override
-            public Invoker<T> getInvoker() {
-                return super.getInvoker();
-            }
-        };
+        //
+        InvokerWrapper<T> invokerWrapper = new InvokerWrapper<>(invoker, registryServiceUrl);
+        return protocol.export(invokerWrapper);
     }
 
     @Override
