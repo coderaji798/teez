@@ -24,10 +24,6 @@ public class RegistryProtocol implements Protocol {
 
     private RegistryFactory registryFactory;
 
-    private ProxyFactory proxyFactory;
-
-    private Protocol protocol;
-
     @Override
     public <T> Exporter<T> export(Invoker<T> invoker) throws RpcException {
         Assert.nonNull(invoker, "invoker is null");
@@ -64,8 +60,6 @@ public class RegistryProtocol implements Protocol {
         URL referenceUrl = URL.valueOf(parameters);
 
         RegistryDirectory<T> registryDirectory = new RegistryDirectory<>(referenceUrl, type);
-        registryDirectory.setRegistry(registry);
-        registryDirectory.setProtocol(protocol);
         registry.subscribe(referenceUrl, registryDirectory);
         //TODO 集群操作
         return null;

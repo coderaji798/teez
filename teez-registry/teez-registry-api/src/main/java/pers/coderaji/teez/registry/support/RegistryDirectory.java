@@ -24,9 +24,6 @@ public class RegistryDirectory<T> implements NotifyListener {
     private final String[] methods;
     private final Map<String, String> paramters;
 
-    private Protocol protocol;
-    private Registry registry;
-
 
     public RegistryDirectory(URL url, Class<T> type) {
         Assert.nonNull(url, "url is null");
