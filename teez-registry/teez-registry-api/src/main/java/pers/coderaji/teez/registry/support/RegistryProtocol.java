@@ -1,6 +1,7 @@
 package pers.coderaji.teez.registry.support;
 
 import lombok.Setter;
+import pers.coderaji.teez.cluster.Cluster;
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.logger.Logger;
@@ -8,8 +9,11 @@ import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.registry.Registry;
 import pers.coderaji.teez.registry.RegistryFactory;
 import pers.coderaji.teez.rpc.*;
+import pers.coderaji.teez.rpc.support.AbstractExporter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +27,10 @@ public class RegistryProtocol implements Protocol {
     private final static Logger logger = Logger.getLogger(RegistryProtocol.class);
 
     private RegistryFactory registryFactory;
+
+    private Protocol protocol;
+
+    private Cluster cluster;
 
     @Override
     public <T> Exporter<T> export(Invoker<T> invoker) throws RpcException {
@@ -38,9 +46,13 @@ public class RegistryProtocol implements Protocol {
         Map<String, String> registryServiceMap = url.getParametersAndRemove(Constants.SERVICE);
         registryServiceMap.putAll(url.getParameters());
         URL registryServiceUrl = URL.valueOf(registryServiceMap);
-        logger.info("registryServiceUrl:{}", registryServiceUrl.urlString());
         registry.register(registryServiceUrl);
-        return null;
+        return new AbstractExporter<T>(invoker) {
+            @Override
+            public Invoker<T> getInvoker() {
+                return super.getInvoker();
+            }
+        };
     }
 
     @Override
@@ -60,8 +72,9 @@ public class RegistryProtocol implements Protocol {
         URL referenceUrl = URL.valueOf(parameters);
 
         RegistryDirectory<T> registryDirectory = new RegistryDirectory<>(referenceUrl, type);
-        registry.subscribe(referenceUrl, registryDirectory);
-        //TODO 集群操作
-        return null;
+        registryDirectory.setProtocol(protocol);
+        registryDirectory.setRegistry(registry);
+        registryDirectory.subscribe(referenceUrl);
+        return cluster.join(registryDirectory);
     }
 }

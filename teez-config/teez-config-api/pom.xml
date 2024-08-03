@@ -19,13 +19,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>pers.coderaji.teez.common</groupId>
-            <artifactId>teez-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>pers.coderaji.teez.rpc</groupId>
-            <artifactId>teez-rpc-api</artifactId>
+            <groupId>pers.coderaji.teez.cluster</groupId>
+            <artifactId>teez-cluster</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

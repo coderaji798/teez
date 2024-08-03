@@ -2,6 +2,8 @@ package pers.coderaji.teez.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import pers.coderaji.teez.cluster.Cluster;
+import pers.coderaji.teez.cluster.directory.StaticDirectory;
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.extension.ExtensionLoader;
@@ -26,6 +28,8 @@ public class ReferenceConfig<T> extends AbstractConfig {
     private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
     private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+
+    private static final Cluster cluster = ExtensionLoader.getExtensionLoader(Cluster.class).getAdaptiveExtension();
 
     private String name;
 
@@ -124,11 +128,11 @@ public class ReferenceConfig<T> extends AbstractConfig {
             if (Objects.equals(urls.size(), 1)) {
                 invoker = protocol.refer(type, urls.get(0));
             } else {
-                List<Invoker<?>> invokers = new ArrayList<>();
+                List<Invoker<T>> invokers = new ArrayList<>();
                 for (URL url : urls) {
                     invokers.add(protocol.refer(type, url));
                 }
-                //TODO 集群操作
+                cluster.join(new StaticDirectory<>(invokers));
             }
             Assert.nonNull(invoker, String.format("no provider available for %s", referenceName));
             proxyReference = (T) proxyFactory.getProxy(invoker);

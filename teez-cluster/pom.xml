@@ -4,12 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>pers.coderaji.teez.registry</groupId>
-        <artifactId>teez-registry</artifactId>
+        <groupId>pers.aji.teez</groupId>
+        <artifactId>teez</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>teez-registry-api</artifactId>
+    <groupId>pers.coderaji.teez.cluster</groupId>
+    <artifactId>teez-cluster</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -19,14 +20,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>pers.coderaji.teez.common</groupId>
+            <artifactId>teez-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>pers.coderaji.teez.rpc</groupId>
             <artifactId>teez-rpc-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>pers.coderaji.teez.cluster</groupId>
-            <artifactId>teez-cluster</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+
 </project>

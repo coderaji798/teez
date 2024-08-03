@@ -11,6 +11,7 @@ import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.config.annotation.Service;
 import pers.coderaji.teez.config.invoker.ProviderMetaDataInvoker;
+import pers.coderaji.teez.rpc.Exporter;
 import pers.coderaji.teez.rpc.Invoker;
 import pers.coderaji.teez.rpc.Protocol;
 import pers.coderaji.teez.rpc.ProxyFactory;
@@ -56,6 +57,8 @@ public class ServiceConfig<T> extends AbstractConfig {
      * 不同注注册中心存不同url
      */
     private final List<URL> urls = new ArrayList<>();
+
+    private final List<Exporter<?>> exporters = new ArrayList<>();
 
     private final Map<String, String> parameters = new ConcurrentHashMap<>();
     /**
@@ -176,7 +179,8 @@ public class ServiceConfig<T> extends AbstractConfig {
             Invoker invokerProxy = proxyFactory.getInvoker(reference, (Class<? super T>) type, url);
             ProviderMetaDataInvoker metaDataInvoker = new ProviderMetaDataInvoker<>(invokerProxy, this);
             //服务暴露
-            protocol.export(metaDataInvoker);
+            Exporter exporter = protocol.export(metaDataInvoker);
+            exporters.add(exporter);
             urls.add(url);
         });
 

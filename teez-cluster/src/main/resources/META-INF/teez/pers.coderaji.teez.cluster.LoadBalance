@@ -1,0 +1,2 @@
+adaptive=pers.coderaji.teez.cluster.LoadBalance$Adaptive
+random=pers.coderaji.teez.cluster.loadbalance.RandomLoadBalance

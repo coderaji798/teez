@@ -1,0 +1,2 @@
+adaptive=pers.coderaji.teez.cluster.Cluster$Adaptive
+failover=pers.coderaji.teez.cluster.support.FailoverCluster

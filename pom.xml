@@ -15,6 +15,7 @@
         <module>teez-registry</module>
         <module>teez-registry/teez-registry-redis</module>
         <module>teez-rpc</module>
+        <module>teez-cluster</module>
     </modules>
 
 
