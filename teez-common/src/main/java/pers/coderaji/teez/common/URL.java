@@ -237,4 +237,29 @@ public final class URL implements Serializable {
         }
         return map;
     }
+
+    public URL setProtocol(String protocol) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public URL setUsername(String username) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public URL setPassword(String password) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public URL setHost(String host) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+
+    public URL setPort(int port) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public URL setPath(String path) {
+        return new URL(protocol, username, password, host, port, path, getParameters());
+    }
 }

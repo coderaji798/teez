@@ -110,6 +110,8 @@ public class ServiceConfig<T> extends AbstractConfig {
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+        //检查列表
+        checkMethods(type, methods);
         //设置默认协议
         if (ObjectUtil.isEmpty(provider.getProtocolConfig().getProtocol())) {
             provider.getProtocolConfig().setProtocol(Constants.TEEZ);
@@ -151,10 +153,11 @@ public class ServiceConfig<T> extends AbstractConfig {
         //方法相关信息
         if (ObjectUtil.nonEmpty(methods)) {
             methods.forEach(method -> {
-                appendParameters(parameters, method, method.getName());
+                String prefix1 = Constants.METHODS + Constants.DOT + method.getName();
+                appendParameters(parameters, method, prefix1);
                 if (ObjectUtil.nonEmpty(method.getArguments())) {
                     method.getArguments().forEach(argument -> {
-                        String prefix = method.getName() + Constants.DOT + Constants.ARGUMENT;
+                        String prefix = prefix1 + Constants.DOT + Constants.ARGUMENT;
                         appendParameters(parameters, argument, prefix);
                     });
                 }
@@ -168,7 +171,7 @@ public class ServiceConfig<T> extends AbstractConfig {
             parameters.put(Constants.PROTOCOL, Constants.REGISTRY);
             //当前serviceConfig中的数据封装为URL
             URL url = URL.valueOf(parameters);
-            logger.info("url:{}",url.urlString());
+            logger.info("url:{}", url.urlString());
             //生成调用代理
             Invoker invokerProxy = proxyFactory.getInvoker(reference, (Class<? super T>) type, url);
             ProviderMetaDataInvoker metaDataInvoker = new ProviderMetaDataInvoker<>(invokerProxy, this);

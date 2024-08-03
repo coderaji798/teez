@@ -2,15 +2,13 @@ package pers.coderaji.teez.config;
 
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.logger.Logger;
+import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author aji
@@ -111,7 +109,7 @@ public abstract class AbstractConfig implements Serializable {
                         && method.getReturnType() == Map.class) {
                     Map<String, String> map = (Map<String, String>) method.invoke(config, new Object[0]);
                     if (ObjectUtil.nonEmpty(map)) {
-                        String pre =ObjectUtil.nonEmpty(prefix) ? prefix + Constants.DOT : "";
+                        String pre = ObjectUtil.nonEmpty(prefix) ? prefix + Constants.DOT : "";
                         for (Map.Entry<String, String> entry : map.entrySet()) {
                             parameters.put(pre + entry.getKey().replace('-', '.'), entry.getValue());
                         }
@@ -135,5 +133,17 @@ public abstract class AbstractConfig implements Serializable {
                 || type == Float.class
                 || type == Double.class
                 || type == Object.class;
+    }
+
+    protected void checkMethods(Class<?> type, List<MethodConfig> methods) {
+        Assert.nonNull(type, "type is null");
+        Assert.nonFalse(type.isInterface(), "type is not an interface");
+        if (ObjectUtil.nonEmpty(methods)) {
+            for (MethodConfig method : methods) {
+                Assert.nonEmpty(method.getName(), "method`s name is empty");
+                boolean anyMatch = Arrays.stream(type.getMethods()).anyMatch(item -> Objects.equals(method.getName(), item.getName()));
+                Assert.nonFalse(anyMatch, String.format("interface %s not found method %s", type, method.getName()));
+            }
+        }
     }
 }
