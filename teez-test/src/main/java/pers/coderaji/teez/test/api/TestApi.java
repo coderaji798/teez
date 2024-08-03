@@ -8,4 +8,5 @@ import pers.coderaji.teez.config.annotation.Service;
  * @description TODO
  */
 public interface TestApi {
+    String getUUID();
 }

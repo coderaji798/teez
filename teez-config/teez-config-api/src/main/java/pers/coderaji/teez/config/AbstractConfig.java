@@ -131,8 +131,7 @@ public abstract class AbstractConfig implements Serializable {
                 || type == Integer.class
                 || type == Long.class
                 || type == Float.class
-                || type == Double.class
-                || type == Object.class;
+                || type == Double.class;
     }
 
     protected void checkMethods(Class<?> type, List<MethodConfig> methods) {
