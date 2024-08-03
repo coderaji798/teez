@@ -2,8 +2,10 @@ package pers.coderaji.teez.cluster.support;
 
 import pers.coderaji.teez.cluster.Directory;
 import pers.coderaji.teez.cluster.LoadBalance;
+import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
 import pers.coderaji.teez.common.extension.ExtensionLoader;
+import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 import pers.coderaji.teez.rpc.Invocation;
 import pers.coderaji.teez.rpc.Invoker;
@@ -42,9 +44,14 @@ public abstract class AbstractClusterInvoker<T> implements Invoker<T> {
         LoadBalance loadBalance = null;
         if (ObjectUtil.nonEmpty(invokers)) {
             URL url = invokers.get(0).getUrl();
-            loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension(url.getProtocol());
+            String name = url.getParameter(Constants.LOADBALANCE, Constants.RANDOM);
+            loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension(name);
         }
         return doInvoke(invocation, invokers, loadBalance);
+    }
+
+    protected void checkInvokers(List<Invoker<T>> invokers){
+        Assert.nonNull(invokers,"invokers is empty");
     }
 
     protected abstract Result doInvoke(Invocation invocation, List<Invoker<T>> invokers,

@@ -12,7 +12,7 @@ import pers.coderaji.teez.rpc.RpcException;
  * @date 2024/8/1 23:10
  * @description 提供者元数据调用器
  */
-public class ProviderMetaDataInvoker<T> implements Invoker {
+public class ProviderMetaDataInvoker<T> implements Invoker<T> {
     private final Invoker<T> invoker;
 
     private ServiceConfig meta;

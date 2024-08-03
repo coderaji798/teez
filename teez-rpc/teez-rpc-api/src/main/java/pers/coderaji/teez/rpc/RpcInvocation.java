@@ -1,5 +1,7 @@
 package pers.coderaji.teez.rpc;
 
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
  * @date 2024/8/3 1:09
  * @description TODO
  */
+@Setter
 public class RpcInvocation implements Invocation, Serializable {
 
     private String methodName;
