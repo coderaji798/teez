@@ -29,6 +29,11 @@
             <artifactId>teez-registry-redis</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>pers.coderaji.teez.rpc</groupId>
+            <artifactId>teez-rpc-teez</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
