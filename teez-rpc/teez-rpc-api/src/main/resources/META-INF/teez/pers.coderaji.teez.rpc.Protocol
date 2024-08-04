@@ -1,1 +1,2 @@
 adaptive=pers.coderaji.teez.rpc.Protocol$Adaptive
+filter=pers.coderaji.teez.rpc.support.ProtocolFilterWrapper

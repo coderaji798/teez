@@ -13,6 +13,9 @@ public class RpcResult implements Result, Serializable {
 
     private Throwable exception;
 
+    public RpcResult() {
+    }
+
     public RpcResult(Object result) {
         this.result = result;
     }

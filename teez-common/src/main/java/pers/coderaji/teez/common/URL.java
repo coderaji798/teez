@@ -6,6 +6,7 @@ import pers.coderaji.teez.common.utl.Assert;
 import pers.coderaji.teez.common.utl.ObjectUtil;
 
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -261,5 +262,9 @@ public final class URL implements Serializable {
 
     public URL setPath(String path) {
         return new URL(protocol, username, password, host, port, path, getParameters());
+    }
+
+    public InetSocketAddress toInetSocketAddress() {
+        return new InetSocketAddress(host, port);
     }
 }
