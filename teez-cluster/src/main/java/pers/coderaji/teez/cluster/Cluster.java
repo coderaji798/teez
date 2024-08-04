@@ -1,5 +1,6 @@
 package pers.coderaji.teez.cluster;
 
+import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.extension.SPI;
 import pers.coderaji.teez.rpc.Invoker;
 import pers.coderaji.teez.rpc.RpcException;
@@ -9,7 +10,7 @@ import pers.coderaji.teez.rpc.RpcException;
  * @date 2024/8/3 15:09
  * @description 集群
  */
-@SPI("failover")
+@SPI(Constants.FAILOVER)
 public interface Cluster {
 
     <T> Invoker<T> join(Directory<T> directory) throws RpcException;

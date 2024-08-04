@@ -1,6 +1,6 @@
 package pers.coderaji.teez.cluster;
 
-import pers.coderaji.teez.common.URL;
+import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.extension.Adaptive;
 import pers.coderaji.teez.common.extension.ExtensionLoader;
 import pers.coderaji.teez.common.utl.Assert;
@@ -18,8 +18,8 @@ public class Cluster$Adaptive implements Cluster {
     public <T> Invoker<T> join(Directory<T> directory) throws RpcException {
         Assert.nonNull(directory, "directory is null");
         Assert.nonNull(directory.getUrl(), "url is null");
-        URL directoryUrl = directory.getUrl();
-        Cluster cluster = ExtensionLoader.getExtensionLoader(Cluster.class).getExtension(directoryUrl.getProtocol());
+        String name = directory.getUrl().getParameter(Constants.CLUSTER,Constants.FAILOVER);
+        Cluster cluster = ExtensionLoader.getExtensionLoader(Cluster.class).getExtension(name);
         return cluster.join(directory);
     }
 

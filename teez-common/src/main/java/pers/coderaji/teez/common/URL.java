@@ -267,4 +267,15 @@ public final class URL implements Serializable {
     public InetSocketAddress toInetSocketAddress() {
         return new InetSocketAddress(host, port);
     }
+
+    @Override
+    public String toString() {
+        return "URL{" +
+                "protocol='" + protocol + '\'' +
+                ", host='" + host + '\'' +
+                ", port=" + port +
+                ", path='" + path + '\'' +
+                ", parameters=" + parameters +
+                '}';
+    }
 }
