@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>teez-remoting-api</module>
+        <module>teez-remoting-transport-netty</module>
     </modules>
 
     <properties>
