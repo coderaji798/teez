@@ -7,4 +7,6 @@ package pers.coderaji.teez.rpc;
  */
 public interface Exporter<T> {
     Invoker<T> getInvoker();
+
+    void unexport();
 }

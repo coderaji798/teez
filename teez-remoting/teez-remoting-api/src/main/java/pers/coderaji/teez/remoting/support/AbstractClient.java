@@ -69,38 +69,6 @@ public abstract class AbstractClient implements Client {
     }
 
     @Override
-    public Object getAttribute(String key) {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel))
-            return null;
-        return channel.getAttribute(key);
-    }
-
-    @Override
-    public void setAttribute(String key, Object value) {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel))
-            return;
-        channel.setAttribute(key, value);
-    }
-
-    @Override
-    public void removeAttribute(String key) {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel))
-            return;
-        channel.removeAttribute(key);
-    }
-
-    @Override
-    public boolean hasAttribute(String key) {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel))
-            return false;
-        return channel.hasAttribute(key);
-    }
-
-    @Override
     public void send(Object message) throws RemotingException {
         Channel channel = getChannel();
         Assert.nonNull(channel, "channel is null");

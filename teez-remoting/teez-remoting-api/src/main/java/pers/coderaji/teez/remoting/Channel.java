@@ -13,16 +13,7 @@ public interface Channel {
 
     URL getUrl();
 
-    boolean hasAttribute(String key);
-
-    Object getAttribute(String key);
-
-    void setAttribute(String key, Object value);
-
-    void removeAttribute(String key);
-
     void send(Object message) throws RemotingException;
-
 
     ChannelHandler getChannelHandler();
 

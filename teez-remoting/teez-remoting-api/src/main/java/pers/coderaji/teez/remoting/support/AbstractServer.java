@@ -27,8 +27,6 @@ public abstract class AbstractServer implements Server {
 
     private InetSocketAddress localAddress;
 
-    private InetSocketAddress bindAddress;
-
     public AbstractServer(ChannelHandler handler, URL url) {
         Assert.nonNull(handler, "handler is null");
         Assert.nonNull(url, "url is null");
@@ -37,7 +35,6 @@ public abstract class AbstractServer implements Server {
         String codecName = url.getParameter(Constants.CODEC, Constants.TEEZ);
         this.codec = ExtensionLoader.getExtensionLoader(Codec.class).getExtension(codecName);
         this.localAddress = getUrl().toInetSocketAddress();
-        this.bindAddress = getUrl().toInetSocketAddress();//TODO
         try {
             doOpen();
         } catch (Throwable e) {
