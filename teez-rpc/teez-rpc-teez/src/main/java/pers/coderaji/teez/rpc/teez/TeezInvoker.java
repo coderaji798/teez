@@ -2,8 +2,8 @@ package pers.coderaji.teez.rpc.teez;
 
 import pers.coderaji.teez.common.Constants;
 import pers.coderaji.teez.common.URL;
-import pers.coderaji.teez.remoting.exchange.ExchangeClient;
-import pers.coderaji.teez.remoting.exchange.ResponseFuture;
+import pers.coderaji.teez.remoting.Client;
+import pers.coderaji.teez.remoting.Response;
 import pers.coderaji.teez.rpc.*;
 import pers.coderaji.teez.rpc.support.AbstractInvoker;
 
@@ -23,12 +23,12 @@ public class TeezInvoker<T> extends AbstractInvoker<T> {
 
     private final AtomicInteger index = new AtomicInteger(0);
 
-    private final ExchangeClient[] clients;
+    private final Client[] clients;
 
     private final Set<Invoker<?>> invokers;
 
 
-    public TeezInvoker(Class<T> type, URL url, Map<String, String> attachment, ExchangeClient[] clients, Set<Invoker<?>> invokers) {
+    public TeezInvoker(Class<T> type, URL url, Map<String, String> attachment, Client[] clients, Set<Invoker<?>> invokers) {
         super(type, url, attachment);
         this.clients = clients;
         this.invokers = invokers;
@@ -38,7 +38,7 @@ public class TeezInvoker<T> extends AbstractInvoker<T> {
     @Override
     protected Result doInvoke(final Invocation invocation) throws Throwable {
         RpcInvocation rpcInvocation = (RpcInvocation) invocation;
-        ExchangeClient currentClient = null;
+        Client currentClient = null;
         if (Objects.equals(clients.length, 1)) {
             currentClient = clients[0];
         } else if (clients.length > 1) {
@@ -50,12 +50,12 @@ public class TeezInvoker<T> extends AbstractInvoker<T> {
         Boolean isAsync = getUrl().getParameter(Constants.ASYNC, Boolean.FALSE);
         try {
             if (isAsync) {
-                ResponseFuture responseFuture = currentClient.request(rpcInvocation, timeout);
-                RpcContext.getContext().setFuture(new FutureAdapter<>(responseFuture));
+                Response response = currentClient.send(rpcInvocation);
+                RpcContext.getContext().setFuture(new FutureAdapter<>(response));
                 return new RpcResult();
             } else {
                 RpcContext.getContext().setFuture(null);
-                return (Result) currentClient.request(rpcInvocation, timeout).get();
+                return (Result) currentClient.send(rpcInvocation, timeout).get();
             }
         } catch (Exception e) {
             throw new RpcException(e);

@@ -12,8 +12,8 @@ import java.nio.Buffer;
  */
 @SPI
 public interface Codec {
-    void encode(Channel channel, Buffer buffer, Object message) throws IOException;
+    void encode(Client channel, Buffer buffer, Object message) throws IOException;
 
 
-    Object decode(Channel channel, Buffer buffer) throws IOException;
+    Object decode(Client channel, Buffer buffer) throws IOException;
 }

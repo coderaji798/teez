@@ -1,7 +1,7 @@
 package pers.coderaji.teez.rpc.teez.filter;
 
 import pers.coderaji.teez.common.Constants;
-import pers.coderaji.teez.remoting.exchange.ResponseFuture;
+import pers.coderaji.teez.remoting.Response;
 import pers.coderaji.teez.rpc.*;
 import pers.coderaji.teez.rpc.teez.FutureAdapter;
 
@@ -20,8 +20,8 @@ public class FutureFilter implements Filter {
         if (isAsync) {
             Future<?> future = RpcContext.getContext().getFuture();
             if (future instanceof FutureAdapter) {
-                ResponseFuture responseFuture = ((FutureAdapter<?>) future).getFuture();
-                result = (Result) responseFuture.get();
+                Response response = ((FutureAdapter<?>) future).getFuture();
+                result = (Result) response.get();
             }
         }
         return result;

@@ -11,7 +11,7 @@ import pers.coderaji.teez.common.extension.SPI;
  */
 @SPI(Constants.NETTY)
 public interface Transporter {
-    Server bind(URL url, ChannelHandler handler) throws RemotingException;
+    Server bind(URL url, ClientHandler handler) throws RemotingException;
 
-    Client connect(URL url, ChannelHandler handler) throws RemotingException;
+    Client connect(URL url, ClientHandler handler) throws RemotingException;
 }

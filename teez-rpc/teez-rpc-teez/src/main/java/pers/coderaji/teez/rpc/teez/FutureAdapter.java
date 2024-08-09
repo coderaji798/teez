@@ -1,6 +1,6 @@
 package pers.coderaji.teez.rpc.teez;
 
-import pers.coderaji.teez.remoting.exchange.ResponseFuture;
+import pers.coderaji.teez.remoting.Response;
 import pers.coderaji.teez.rpc.RpcException;
 
 import java.util.concurrent.Future;
@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class FutureAdapter<V> implements Future<V> {
 
-    private final ResponseFuture future;
+    private final Response response;
 
-    public FutureAdapter(ResponseFuture future) {
-        this.future = future;
+    public FutureAdapter(Response response) {
+        this.response = response;
     }
 
-    public ResponseFuture getFuture() {
-        return future;
+    public Response getFuture() {
+        return response;
     }
 
     @Override
@@ -35,14 +35,14 @@ public class FutureAdapter<V> implements Future<V> {
 
     @Override
     public boolean isDone() {
-        return future.isDone();
+        return response.isDone();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public V get() {
         try {
-            return (V) future.get();
+            return (V) response.get();
         } catch (Throwable e) {
             throw new RpcException(e);
         }
@@ -53,7 +53,7 @@ public class FutureAdapter<V> implements Future<V> {
     public V get(long timeout, TimeUnit unit) {
         int timeoutInMillis = (int) TimeUnit.MILLISECONDS.convert(timeout, unit);
         try {
-            return (V) future.get(timeoutInMillis);
+            return (V) response.get(timeoutInMillis);
         } catch (Throwable e) {
             throw new RpcException(e);
         }

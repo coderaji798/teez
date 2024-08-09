@@ -10,12 +10,12 @@ import pers.coderaji.teez.remoting.*;
  */
 public class NettyTransporter implements Transporter {
     @Override
-    public Server bind(URL url, ChannelHandler handler) throws RemotingException {
+    public Server bind(URL url, ClientHandler handler) throws RemotingException {
         return new NettyServer(handler, url);
     }
 
     @Override
-    public Client connect(URL url, ChannelHandler handler) throws RemotingException {
-        return null;
+    public Client connect(URL url, ClientHandler handler) throws RemotingException {
+        return new NettyClient(handler, url);
     }
 }

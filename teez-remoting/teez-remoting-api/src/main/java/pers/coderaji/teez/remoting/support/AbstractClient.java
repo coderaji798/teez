@@ -20,13 +20,13 @@ public abstract class AbstractClient implements Client {
 
     private static final Logger logger = Logger.getLogger(AbstractClient.class);
 
-    private final ChannelHandler handler;
+    private final ClientHandler handler;
 
     private volatile URL url;
 
     private Codec codec;
 
-    public AbstractClient(ChannelHandler handler, URL url) {
+    public AbstractClient(ClientHandler handler, URL url) {
         Assert.nonNull(handler, "handler is null");
         Assert.nonNull(url, "url is null");
         this.handler = handler;
@@ -46,33 +46,40 @@ public abstract class AbstractClient implements Client {
     }
 
     @Override
-    public ChannelHandler getChannelHandler() {
+    public ClientHandler getClientHandler() {
         return handler;
     }
 
     @Override
     public InetSocketAddress getRemoteAddress() {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel)) {
+        Client Client = getClient();
+        if (Objects.isNull(Client)) {
             return getUrl().toInetSocketAddress();
         }
-        return channel.getRemoteAddress();
+        return Client.getRemoteAddress();
     }
 
     @Override
     public InetSocketAddress getLocalAddress() {
-        Channel channel = getChannel();
-        if (Objects.isNull(channel)) {
+        Client Client = getClient();
+        if (Objects.isNull(Client)) {
             return InetSocketAddress.createUnresolved(NetUtil.getLocalHost(), 0);
         }
-        return channel.getLocalAddress();
+        return Client.getLocalAddress();
     }
 
     @Override
-    public void send(Object message) throws RemotingException {
-        Channel channel = getChannel();
-        Assert.nonNull(channel, "channel is null");
-        channel.send(message);
+    public Response send(Object message) throws RemotingException {
+        Client client = getClient();
+        Assert.nonNull(client, "Client is null");
+        return client.send(message);
+    }
+
+    @Override
+    public Response send(Object message, int timeout) throws RemotingException {
+        Client client = getClient();
+        Assert.nonNull(client, "client is null");
+        return client.send(message, timeout);
     }
 
     @Override
@@ -88,5 +95,5 @@ public abstract class AbstractClient implements Client {
 
     protected abstract void doClose() throws Throwable;
 
-    protected abstract Channel getChannel();
+    protected abstract Client getClient();
 }

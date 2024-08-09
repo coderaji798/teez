@@ -1,8 +1,7 @@
 package pers.coderaji.teez.remoting.transport.netty;
 
 import pers.coderaji.teez.common.URL;
-import pers.coderaji.teez.remoting.Channel;
-import pers.coderaji.teez.remoting.ChannelHandler;
+import pers.coderaji.teez.remoting.ClientHandler;
 import pers.coderaji.teez.remoting.Client;
 import pers.coderaji.teez.remoting.support.AbstractClient;
 
@@ -13,7 +12,7 @@ import pers.coderaji.teez.remoting.support.AbstractClient;
  */
 public class NettyClient extends AbstractClient {
 
-    public NettyClient(ChannelHandler handler, URL url) {
+    public NettyClient(ClientHandler handler, URL url) {
         super(handler, url);
     }
 
@@ -28,7 +27,12 @@ public class NettyClient extends AbstractClient {
     }
 
     @Override
-    protected Channel getChannel() {
+    protected Client getClient() {
+        return null;
+    }
+
+    @Override
+    public ClientHandler getClientHandler() {
         return null;
     }
 }

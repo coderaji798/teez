@@ -14,7 +14,7 @@ import pers.coderaji.teez.common.utl.Assert;
 @Adaptive
 public class Transporter$Adaptive implements Transporter {
     @Override
-    public Server bind(URL url, ChannelHandler handler) throws RemotingException {
+    public Server bind(URL url, ClientHandler handler) throws RemotingException {
         Assert.nonNull(url, "url is null");
         Assert.nonNull(handler, "handler is null");
         String name = url.getParameter(Constants.TRANSPORTER, Constants.NETTY);
@@ -23,7 +23,7 @@ public class Transporter$Adaptive implements Transporter {
     }
 
     @Override
-    public Client connect(URL url, ChannelHandler handler) throws RemotingException {
+    public Client connect(URL url, ClientHandler handler) throws RemotingException {
         Assert.nonNull(url, "url is null");
         Assert.nonNull(handler, "handler is null");
         String name = url.getParameter(Constants.TRANSPORTER, Constants.NETTY);

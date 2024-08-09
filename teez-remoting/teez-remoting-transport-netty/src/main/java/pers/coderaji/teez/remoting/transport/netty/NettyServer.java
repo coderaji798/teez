@@ -1,22 +1,12 @@
 package pers.coderaji.teez.remoting.transport.netty;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.util.concurrent.DefaultThreadFactory;
 import pers.coderaji.teez.common.URL;
-import pers.coderaji.teez.common.utl.ObjectUtil;
-import pers.coderaji.teez.remoting.Channel;
-import pers.coderaji.teez.remoting.ChannelHandler;
-import pers.coderaji.teez.remoting.RemotingException;
-import pers.coderaji.teez.remoting.Server;
+import pers.coderaji.teez.remoting.Client;
+import pers.coderaji.teez.remoting.ClientHandler;
 import pers.coderaji.teez.remoting.support.AbstractServer;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author aji
@@ -25,18 +15,18 @@ import java.util.Objects;
  */
 public class NettyServer extends AbstractServer {
 
-    public NettyServer(ChannelHandler handler, URL url) {
+    public NettyServer(ClientHandler handler, URL url) {
         super(handler, url);
     }
 
     @Override
-    public Collection<Channel> getChannels() {
+    public Collection<Client> getChannels() {
 
         return null;
     }
 
     @Override
-    public Channel getChannel(InetSocketAddress remoteAddress) {
+    public Client getChannel(InetSocketAddress remoteAddress) {
 
         return null;
     }

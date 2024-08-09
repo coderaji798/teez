@@ -19,7 +19,7 @@ public abstract class AbstractServer implements Server {
 
     private static final Logger logger = Logger.getLogger(AbstractServer.class);
 
-    private final ChannelHandler handler;
+    private final ClientHandler handler;
 
     private volatile URL url;
 
@@ -27,7 +27,7 @@ public abstract class AbstractServer implements Server {
 
     private InetSocketAddress localAddress;
 
-    public AbstractServer(ChannelHandler handler, URL url) {
+    public AbstractServer(ClientHandler handler, URL url) {
         Assert.nonNull(handler, "handler is null");
         Assert.nonNull(url, "url is null");
         this.handler = handler;
@@ -48,7 +48,7 @@ public abstract class AbstractServer implements Server {
     }
 
     @Override
-    public ChannelHandler getChannelHandler() {
+    public ClientHandler getClientHandler() {
         return handler;
     }
 
@@ -59,8 +59,8 @@ public abstract class AbstractServer implements Server {
 
     @Override
     public void send(Object message) throws RemotingException {
-        Collection<Channel> channels = getChannels();
-        for (Channel channel : channels) {
+        Collection<Client> channels = getChannels();
+        for (Client channel : channels) {
             channel.send(message);
         }
     }

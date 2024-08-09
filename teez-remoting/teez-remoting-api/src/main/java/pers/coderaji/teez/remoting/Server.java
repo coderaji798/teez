@@ -14,11 +14,11 @@ public interface Server {
 
     URL getUrl();
 
-    Collection<Channel> getChannels();
+    Collection<Client> getChannels();
 
-    Channel getChannel(InetSocketAddress remoteAddress);
+    Client getChannel(InetSocketAddress remoteAddress);
 
-    ChannelHandler getChannelHandler();
+    ClientHandler getClientHandler();
 
     InetSocketAddress getLocalAddress();
 
